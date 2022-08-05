@@ -1,3 +1,5 @@
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/SAPUCC/inviterbot)
+
 # Maubot Inviterbot for Azure AD and LDAP
 A [maubot](https://github.com/maubot) plugin that syncs user-groups from an identity management like Microsoft Azure Active Directory or LDAP to [Matrix](https://matrix.org/) rooms.
 This way you can create managed rooms where users are automatically invited or kicked depending on their membership in a specific user-group. Permission-levels like "Standard" or "Moderator" as well as room permissions are also managed by the bot.
@@ -12,10 +14,12 @@ You might be also interested in this project, which is quite similiar: <https://
 ## Installation
 This is a plugin for the Maubot bot system which is required for the bot to run.
 
-It is also required to install the following additional dependencies to your maubot server environment.
-- `pip install msgraph-core azure-identity ldap3`
+It is also required to install the following additional dependencies to your maubot server environment. You can install them all with `pip install -r requirements.txt`:
+- azure-identity
+- msgraph-core
+- ldap3
 
-Use this Dockerfile to have the requirements already installed:
+Otherwise use this Dockerfile to have the requirements already installed:
 ````
 FROM dock.mau.dev/maubot/maubot
 RUN apk add gcc
