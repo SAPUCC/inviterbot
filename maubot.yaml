@@ -1,0 +1,13 @@
+maubot: 0.2.0
+id: de.in4md-service.inviterbot
+version: 0.1.0
+license: None
+modules:
+ - inviter
+main_class: InviterBot
+extra_files:
+- base-config.yaml
+dependencies:
+-
+database: false
+config: true

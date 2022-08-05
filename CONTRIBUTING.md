@@ -27,8 +27,8 @@ In short, when you submit code changes, your submissions are understood to be un
 By contributing, you agree that your contributions will be licensed under its GPLv3 license.
 Copy this to the beginning of each file.:
 ````
-<one line to give the program's name and a brief idea of what it does.>
-Copyright (C) <year>  <name of author>
+Inviterbot - A maubot plugin to sync users from Azure AD and LDAP into matrix rooms
+Copyright (C) 2022  SAP UCC Magdeburg
 ````
 
 

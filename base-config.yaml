@@ -1,0 +1,73 @@
+# Type of the Identity Provider (ldap or azure_ad).
+idp_type: azure_ad
+
+# Homeserver used to generate MXIDs from userPrincipalName (Azure AD) or uids (LDAP)
+mxid_homeserver: "example.com"
+
+# https://docs.microsoft.com/en-us/graph/api/group-list-transitivemembers?view=graph-rest-1.0&tabs=http
+# on portal.azure.com go to "App registrations" > "<Bot-Name>" > "API permissions"
+# The application needs to have "Group.Read.All" and "User.Read.All" permissions.
+# Permission type needs to be "Application"
+azure_ad:
+  # Chat user-group that "MTRX ..."-user-groups are member of
+  azure_root_group_id: ""
+
+  # Azure client configuration
+  azure_cloud_instance: "https://login.microsoftonline.com/"
+  azure_tenant_id: ""
+  azure_client_id: ""
+  azure_client_secret: ""
+
+ldap:
+  host: "ipa.example.com"
+  port: 389
+  bind_dn: "uid=inviterbot,cn=sysaccounts,cn=etc,dc=example,dc=com"
+  bind_password: ""
+
+  # Base-DN of user and group objects
+  base_dn_users: "cn=users,cn=accounts,dc=example,dc=com"
+  base_dn_groups: "cn=groups,cn=accounts,dc=example,dc=com"
+
+  user_filter:  "(!(memberof=cn=company_employees,cn=groups,cn=accounts,dc=example,dc=com))"
+
+# Room for bot-administration. Commands are only accepted inside this room.
+administration_room: ""
+
+# Permissions (for details see https://spec.matrix.org/latest/client-server-api/#mroompower_levels)
+permissions:
+  users_default: 0        # "Default role"    - Default power_level for every user in room / "Standard-role"
+  events_default: 0       # "Send messages"   - Default level required to send message events. Can be overridden
+  state_default: 50       # "Change settings" - Default level required to send state events. Can be overridden
+  invite: 100             # "Invite users"
+  kick: 100               # "Remove users"
+  ban: 100                # "Ban users"
+  redact: 100             # "Remove messages sent by others" - Level required to redact an event sent by another user
+  events:
+    m.room.name: 50                 # "Change room name"
+    m.room.power_levels: 100        # "Change permissions"
+    m.room.history_visibility: 100  # "Change history visibility"
+    m.room.canonical_alias: 100     # "Change room alias"
+    m.room.avatar: 50               # "Change room avatar"
+    m.room.tombstone: 100           # "Upgrade the room"
+    m.room.topic: 50                # "Change topic"
+    m.room.pinned_events: 0         # "Pin messages"
+    m.reaction: 0                   # "Send reactions"
+    m.room.redaction: 100           # "Remove messages sent by me"
+
+# History visibility for all managed rooms (https://spec.matrix.org/latest/client-server-api/#room-history-visibility)
+# One of: world_readable, shared, invited, joined
+history_visibility: "shared"
+
+# Whether encryption should be enabled on room-creation. Be aware that encryption can not be disabled once enabled.
+encryption_on_room_creation: True
+
+# Cautious mode (do not auto-delete users)
+# If enabled, you can still manually trigger a sync and kick users that are not members anymore '!sync'
+cautious: True
+
+# Renamed users
+# <new username>: <old username>
+# username is here the first part of a MXID
+# Username of @testnew:homeserver.com would be `testnew`
+renamed_users:
+  # testnew: testold

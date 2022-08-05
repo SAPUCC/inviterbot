@@ -1,3 +1,4 @@
+"""
 Inviterbot - A maubot plugin to sync users from Azure AD and LDAP into matrix rooms
 Copyright (C) 2022  SAP UCC Magdeburg
 
@@ -13,3 +14,15 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
+
+from enum import Enum
+
+
+class PowerLevel(Enum):
+    """The bot knows 3 power-levels. More power levels can be added if needed.
+
+    """
+    STANDARD = 0
+    MODERATOR = 50
+    ADMIN = 100
