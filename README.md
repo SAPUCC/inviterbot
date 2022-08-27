@@ -11,6 +11,8 @@ You might be also interested in this project, which is quite similiar: <https://
 - Set permissions and roles for all managed matrix room
 - Management room for debugging and manual syncing
 
+![Inviter-Bot1](https://user-images.githubusercontent.com/8049779/187029596-8534d5ab-64ac-4352-9d69-66300dc416d3.png)
+
 ## Installation
 This is a plugin for the Maubot bot system which is required for the bot to run.
 
@@ -93,9 +95,12 @@ Chat
 │  │  ├─ User E
 ````
 
+![Inviter-Bot2](https://user-images.githubusercontent.com/8049779/187029651-8f4b81ce-1ae7-4c19-865b-6445e86941eb.png)
+
 ### LDAP
 #### Setup
 - Create an LDAP bind account (read only)
+
 #### Example user-group structure
 Create user-groups in your LDAP like shown below. The `xxx` is used as a replacement for `{@, :}`, because these symbols are not allowed in LDAP.
 ````
