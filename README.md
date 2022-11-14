@@ -67,7 +67,7 @@ In your Maubot server Web-UI do the following:
 
 ### Log levels
 The log levels are very verbose per default. This can lead to many log messages especially from the microsoft azure library.
-You may update the `config.yaml``to use INFO instead of debug.
+You may update the `config.yaml` to use INFO instead of debug.
 
 ````yaml
 [...]
