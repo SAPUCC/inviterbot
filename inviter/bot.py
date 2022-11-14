@@ -152,7 +152,7 @@ class InviterBot(Plugin):
             await evt.respond(helper.generate_message_content(message))
             return
 
-        self.log.debug(f"Managed room count {len(managed_rooms)}")
+        # self.log.debug(f"Managed room count {len(managed_rooms)}")
         message = "**Managed rooms:** (as in IdP)\n" + ''.join("\n" + str(element) + '\n' for element in managed_rooms)
         await evt.respond(helper.generate_message_content(message))
 

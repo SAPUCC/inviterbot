@@ -95,7 +95,7 @@ class MatrixUtils:
         :param visibility: Visibility which the room should have
         :return: Nothing
         """
-        self.logger.debug(f"Ensuring visibility for {room_id}...")
+        # self.logger.debug(f"Ensuring visibility for {room_id}...")
         current_visibility = await self.room_methods.get_room_directory_visibility(
             room_id
         )
@@ -103,6 +103,7 @@ class MatrixUtils:
             await self.room_methods.set_room_directory_visibility(
                 room_id, RoomDirectoryVisibility(visibility)
             )
+            self.logger.debug(f"Changed visibility of {room_id} from {current_visibility} to {visibility}.")
 
     async def ensure_room_name(self, room_id: RoomID, name: str) -> None:
         """Ensures that a room has the specified name
@@ -157,7 +158,7 @@ class MatrixUtils:
         :param may_create_room: Whether a new room may be created if the room is not found.
         :return: Room id
         """
-        self.logger.debug(f"Ensuring {alias} exists...")
+        # self.logger.debug(f"Ensuring {alias} exists...")
         try:
             room = await self.room_methods.resolve_room_alias(RoomAlias(alias))
         except MNotFound:
@@ -167,7 +168,7 @@ class MatrixUtils:
         if room is None:
             raise EnsureRoomWithAliasException(f"Could not find nor create room for alias {alias}")
         else:
-            self.logger.debug(f"Room {alias} already exists: {room.room_id}")
+            # self.logger.debug(f"Room {alias} already exists: {room.room_id}")
             return room.room_id
 
     @staticmethod
@@ -208,8 +209,8 @@ class MatrixUtils:
         room_members, room_invitees = self.state_events_to_member_list(
             room_member_events
         )
-        self.logger.debug(f"Room {room_id} has members:{str(room_members)}")
-        self.logger.debug(f"Room {room_id} has invitees:{str(room_invitees)}")
+        # self.logger.debug(f"Room {room_id} has members:{str(room_members)}")
+        # self.logger.debug(f"Room {room_id} has invitees:{str(room_invitees)}")
 
         # Invite users if not in room
         invited_users: [str] = []
@@ -221,7 +222,7 @@ class MatrixUtils:
                     await asyncio.sleep(3.4)
                     await self.room_methods.invite_user(room_id, mxid)
                 invited_users.append(mxid)
-        self.logger.debug(f"Successfully ensured invitees for {room_id}")
+        # self.logger.debug(f"Successfully ensured invitees for {room_id}")
 
         # Kick users of own homeserver if not in user_info_map
         kicked_users: [str] = []
@@ -254,7 +255,7 @@ class MatrixUtils:
         )
         current_power_levels: dict[UserID, int] = current_state["users"]
         current_users_default: int = current_state["users_default"]
-        self.logger.debug(f"Current power levels: {str(current_power_levels)}")
+        # self.logger.debug(f"Current power levels: {str(current_power_levels)}")
         change: bool = False
         for mxid in user_info_map:
             new_power_level = user_info_map[mxid]["power_level"]
@@ -265,7 +266,7 @@ class MatrixUtils:
                                                           current_users_default) != new_power_level else change
                 if change:
                     current_power_levels[UserID(mxid)] = new_power_level
-        self.logger.debug(f"New power levels: {str(current_power_levels)}")
+        # self.logger.debug(f"New power levels: {str(current_power_levels)}")
         permissions = current_state if not permissions else permissions
         permissions.users = current_power_levels
         change = True if permission_diff(current_state, permissions) else change
@@ -275,7 +276,7 @@ class MatrixUtils:
                 EventType.ROOM_POWER_LEVELS,
                 permissions
             )
-            self.logger.debug(f"Successfully ensured power levels and permissions")
+            self.logger.debug(f"Successfully ensured new power levels and permissions")
         else:
             self.logger.debug(f"No difference in power levels and permissions")
         return True
@@ -295,8 +296,8 @@ class MatrixUtils:
         current_power_levels: dict[UserID, int] = current_state["users"]
         current_users_default: int = current_state["users_default"]  # default power level for all users in room
 
-        self.logger.debug(f"Current power levels: {str(current_power_levels)}")
-        self.logger.debug(f"Current users_default: {str(current_users_default)}")
+        # self.logger.debug(f"Current power levels: {str(current_power_levels)}")
+        # self.logger.debug(f"Current users_default: {str(current_users_default)}")
 
         user_power_level = current_power_levels.get(user_id, current_users_default)
 
@@ -312,7 +313,7 @@ class MatrixUtils:
         current_state = await self.room_methods.get_state_event(
             room_id, EventType.ROOM_HISTORY_VISIBILITY
         )
-        self.logger.debug(f"Current room visibility: {current_state.get('history_visibility')}")
+        # self.logger.debug(f"Current history visibility: {current_state.get('history_visibility')}")
         if current_state.get('history_visibility') != visibility:
             content = {
                 'history_visibility': visibility
@@ -322,6 +323,7 @@ class MatrixUtils:
                 EventType.ROOM_HISTORY_VISIBILITY,
                 content
             )
+            self.logger.debug(f"Changed history visibility of {room_id} to {visibility}")
 
     async def room_is_manageable(self, client: MaubotMatrixClient, room_id: RoomID,
                                  joined_rooms: List[RoomID] = None) -> bool:
@@ -337,10 +339,10 @@ class MatrixUtils:
         joined_rooms = await client.get_joined_rooms() if not joined_rooms else joined_rooms
         if room_id in joined_rooms and \
                 (await self.get_power_level(room_id, UserID(client.mxid)) >= PowerLevel.MODERATOR.value):
-            self.logger.debug(f"Room is manageable: {room_id}")
+            # self.logger.debug(f"Room is manageable: {room_id}")
             return True
         else:
-            self.logger.debug(f"Room is not manageable: {room_id}")
+            # self.logger.debug(f"Room is not manageable: {room_id}")
             return False
 
     async def ensure_room_is_leavable(self, room_id: RoomID, new_admin: str) -> bool:
@@ -391,7 +393,7 @@ class MatrixUtils:
         :param power_level_state: Pre-fetched power-level-state to speed up things
         :return: Returns True if a users meets the "kickable" conditions
         """
-        self.logger.debug(f"Checking, if {user_id} should be removed...")
+        # self.logger.debug(f"Checking, if {user_id} should be removed...")
         # User may not be admin
         if not power_level_state:
             power_level_state = await self.room_methods.get_state_event(

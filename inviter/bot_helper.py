@@ -134,10 +134,10 @@ async def get_permissions_from_config(config: Config) -> PowerLevelStateEventCon
     )
 
     for event_type, power_level in events_dict.items():
-        logging.getLogger("maubot").debug(event_type)
+        # logging.getLogger("maubot").debug(event_type)
         result.events[EventType.find(event_type)] = power_level
 
-    logging.getLogger("maubot").debug(f"PowerLevelStateEventContent from config: {result}")
+    # logging.getLogger("maubot").debug(f"PowerLevelStateEventContent from config: {result}")
 
     return result
 

@@ -65,6 +65,54 @@ In your Maubot server Web-UI do the following:
 - Load the *.mbp file from releases into your Maubot Manager (can also be generated from source with `mbc build`)
 - Create client and instance in Maubot Manager
 
+### Log levels
+The log levels are very verbose per default. This can lead to many log messages especially from the microsoft azure library.
+You may update the `config.yaml``to use INFO instead of debug.
+
+````yaml
+[...]
+# Python logging configuration.
+#
+# See section 16.7.2 of the Python documentation for more info:
+# https://docs.python.org/3.6/library/logging.config.html#configuration-dictionary-schema
+logging:
+    version: 1
+    formatters:
+        colored:
+            (): maubot.lib.color_log.ColorFormatter
+            format: "[%(asctime)s] [%(levelname)s@%(name)s] %(message)s"
+        normal:
+            format: "[%(asctime)s] [%(levelname)s@%(name)s] %(message)s"
+    handlers:
+        file:
+            class: logging.handlers.RotatingFileHandler
+            formatter: normal
+            filename: ./maubot.log
+            maxBytes: 10485760
+            backupCount: 10
+        console:
+            class: logging.StreamHandler
+            formatter: colored
+    loggers:
+        maubot:
+            level: INFO
+        mau:
+            level: INFO
+        aiohttp:
+            level: INFO
+        azure.identity._internal.get_token_mixin:
+            level: INFO
+        urllib3.connectionpool:
+            level: INFO
+        msal.application:
+            level: INFO
+        msal.telemetry:
+            level: INFO
+    root:
+        level: DEBUG
+        handlers: [file, console]
+````
+
 
 ## Setup
 One bot instance can only manage on identity provider at a time.
