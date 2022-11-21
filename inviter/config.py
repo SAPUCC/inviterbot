@@ -45,6 +45,6 @@ class Config(BaseProxyConfig):
         """
         renamed_users = self.get("renamed_users", {})
         if renamed_users.get(mxid.username):
-            logging.getLogger("maubot").debug(f"Mapped user {mxid.username} to {renamed_users.get(mxid.username)}")
+            # logging.getLogger("maubot").debug(f"Mapped user {mxid.username} to {renamed_users.get(mxid.username)}")
             mxid.username = renamed_users.get(mxid.username)
         return mxid

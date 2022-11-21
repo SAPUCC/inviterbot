@@ -1,7 +1,7 @@
 maubot: 0.2.0
 id: de.in4md-service.inviterbot
-version: 0.1.0
-license: None
+version: 0.1.1
+license: GPLv3
 modules:
  - inviter
 main_class: InviterBot
