@@ -266,6 +266,12 @@ We would love to see your contribution to this project. Please refer to `CONTRIB
 └──  maubot.yaml      # Informations about the plugin
 ````
 
+### CI
+The release is created automatically via GitHub Actions. The workflow also includes building a .mbp plugin file and attaching it to the release. It is triggered only on main. To create a new release,
+  1. Update the version in the maubot.yaml file
+  2. Create a new git tag: `git tag -a v0.0.1 -m "my version 0.0.1"`
+  3. Push the new tag to github and see the workflow to his job: `git push --follow-tags`
+
 ## Docs
 For now, please refer to the docstrings in the code.
 
