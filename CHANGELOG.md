@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 
 
+## [0.1.2] - 2023-03-13
+
+### Fix
+
+- Fix: Usernames should always be lowercase, even if fetched from Azure as not mixedcase principal name.
+
 ## [0.1.1] - 2022-11-14
 
 ### Changed
