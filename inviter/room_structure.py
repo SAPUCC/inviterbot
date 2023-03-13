@@ -63,7 +63,7 @@ class MXID:
     homeserver: str = None
 
     def __init__(self, username: str, homeserver: str):
-        self.username = username
+        self.username = username.lower()
         self.homeserver = homeserver
 
     @classmethod
@@ -73,7 +73,7 @@ class MXID:
         :param user_id: A string representing a MXID (e.g. @name:homeserver.tld)
         :return: Newly created MXID object
         """
-        username: str = user_id.split(':', 1)[0].replace('@', '')
+        username: str = user_id.split(':', 1)[0].replace('@', '').lower()
         homeserver: str = user_id.split(':', 1)[1]
         return cls(username, homeserver)
 
