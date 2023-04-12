@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - 
 
+## [0.1.3] - 2023-04-12
+
+### Fix
+
+- Fix: Support external users in Azure AD. (Remove _abc.com#EXT# artifacts from username)
+
 ## [0.1.2] - 2023-03-13
 
 ### Fix
