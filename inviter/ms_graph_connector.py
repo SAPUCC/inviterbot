@@ -25,6 +25,8 @@ from msgraph.core import GraphClient
 from inviter.config import Config
 from inviter.room_structure import MXID, PowerLevel, RoomMember, Room, RoomAlias
 
+import re
+
 
 async def get_client(tenant_id: str, client_id: str, client_secret: str) -> GraphClient:
     """
@@ -136,9 +138,10 @@ async def get_rooms(config: Config) -> List[Room]:
             elif account_enabled is False:
                 continue
 
-            # Get room member details from user
+            # Get room member details from user, remove artifacts of external users
+            userPrincipalName: str = re.sub('\_.*#EXT#', '', user.get('userPrincipalName').split('@', 1)[0])
             mxid = config.get_renamed_mxid(
-                MXID(user.get('userPrincipalName').split('@', 1)[0], member_homeserver))
+                MXID(userPrincipalName, member_homeserver))
             permission_level = PowerLevel.STANDARD
 
             # Group owners in AD get the moderator role in matrix room
