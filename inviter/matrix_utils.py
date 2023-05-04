@@ -159,6 +159,7 @@ class MatrixUtils:
         :return: Room id
         """
         # self.logger.debug(f"Ensuring {alias} exists...")
+        room = None
         try:
             room = await self.room_methods.resolve_room_alias(RoomAlias(alias))
         except MNotFound:
