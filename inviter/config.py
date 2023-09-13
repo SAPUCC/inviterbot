@@ -43,7 +43,15 @@ class Config(BaseProxyConfig):
         :param mxid: The mxid from the idp
         :return: The correct mxid after applying mapping from config
         """
+        # Check if mxid or mxid.username is None
+        if mxid is None or mxid.username is None:
+            return mxid
+    
         renamed_users = self.get("renamed_users", {})
+
+        if renamed_users is None:
+            return mxid
+    
         if renamed_users.get(mxid.username):
             # logging.getLogger("maubot").debug(f"Mapped user {mxid.username} to {renamed_users.get(mxid.username)}")
             mxid.username = renamed_users.get(mxid.username)
