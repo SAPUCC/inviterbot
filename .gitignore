@@ -271,3 +271,9 @@ cython_debug/
 
 # Maubot Plugin Files
 *.mbp
+
+# Zip Files
+*.zip
+
+# DS_Store Files
+.DS_Store
