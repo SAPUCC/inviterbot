@@ -1,6 +1,6 @@
-mautrix~=0.15.8
+mautrix~=0.20.3
 pytz~=2022.1
-maubot~=0.3.1
+maubot~=0.4.2
 ldap3~=2.9.1
 azure-identity~=1.8.0
 msgraph-core~=0.2.2

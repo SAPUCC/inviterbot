@@ -29,6 +29,7 @@ ldap:
   base_dn_groups: "cn=groups,cn=accounts,dc=example,dc=com"
 
   user_filter:  "(!(memberof=cn=company_employees,cn=groups,cn=accounts,dc=example,dc=com))"
+  username_attribute: "uid"
 
 # Room for bot-administration. Commands are only accepted inside this room.
 administration_room: ""
