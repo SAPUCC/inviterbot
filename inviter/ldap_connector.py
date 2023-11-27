@@ -55,6 +55,7 @@ def get_rooms(config: Config) -> Optional[List[Room]]:
     base_dn_groups = ldap_config.get("base_dn_groups", None)
     base_dn_users = ldap_config.get("base_dn_users", None)
     user_filter = ldap_config.get("user_filter", None)
+    username_attribute = ldap_config.get("username_attribute", "uid")
     if (not homeserver
             or not ldap_config
             or not base_dn_groups
@@ -92,8 +93,8 @@ def get_rooms(config: Config) -> Optional[List[Room]]:
 
     rooms: List[Room] = []
     for group in groups:
-        group_members = get_group_members(connection, groups.get(group), base_dn_users, user_filter)
-        group_owners = get_group_members(connection, owner_groups.get(group), base_dn_users, user_filter) if group in owner_groups else []
+        group_members = get_group_members(connection, groups.get(group), base_dn_users, username_attribute, user_filter)
+        group_owners = get_group_members(connection, owner_groups.get(group), base_dn_users, username_attribute, user_filter) if group in owner_groups else []
 
         room_members: List[RoomMember] = []
         for group_member in group_members:
@@ -108,7 +109,7 @@ def get_rooms(config: Config) -> Optional[List[Room]]:
     return rooms
 
 
-def get_group_members(connection: Connection, group_dn: str, user_dn: str, search_filter: str = '(objectClass=*)')\
+def get_group_members(connection: Connection, group_dn: str, user_dn: str, username_attribute: str, search_filter: str = '(objectClass=*)')\
         -> List[Tuple[str, bool]]:
     """Return members of a given user-group.
 
@@ -120,10 +121,10 @@ def get_group_members(connection: Connection, group_dn: str, user_dn: str, searc
     """
     members: List[Tuple[str, bool]] = []
     search = f"(&(memberOf={group_dn}){search_filter})"
-    connection.search(user_dn, search, attributes=["uid", "nsAccountLock"])
+    connection.search(user_dn, search, attributes=[username_attribute, "nsAccountLock"])
     entries = connection.entries
     for element in entries:
-        members.append((str(element.uid), element.nsAccountLock.value))
+        members.append((str(getattr(element, username_attribute)), element.nsAccountLock.value))
     return members
 
 
