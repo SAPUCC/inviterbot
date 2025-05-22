@@ -21,30 +21,11 @@ It is also required to install the following additional dependencies to your mau
 - msgraph-core
 - ldap3
 
-Otherwise use this Dockerfile to have the requirements already installed:
-````
-FROM dock.mau.dev/maubot/maubot
-RUN apk add gcc
-RUN pip install --upgrade pip
-RUN pip install azure-identity msgraph-core ldap3
-````
+Otherwise use the [Dockerfile](https://github.com/SAPUCC/inviterbot/blob/main/Dockerfile) to have the requirements already installed.
 
 Example `docker-compose.yml` for setting up the Maubot server:
 ````yaml
-version: "3.6"
-
 services:
-  postgres:
-    image: postgres:13.2
-    restart: always
-    expose:
-      - 5432
-    volumes:
-      - ./pgdata:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=
-      - POSTGRES_USER=postgres
-
   maubot:
     build:
       dockerfile: ./Dockerfile
@@ -57,8 +38,6 @@ services:
     - ./data:/data
     ports:
       - 29316:29316
-    depends_on:
-      - postgres
 ````
 
 In your Maubot server Web-UI do the following:
