@@ -110,7 +110,7 @@ def get_rooms(config: Config) -> Optional[List[Room]]:
 
 
 def get_group_members(connection: Connection, group_dn: str, user_dn: str, username_attribute: str, search_filter: str = '(objectClass=*)')\
-        -> List[Tuple[str, bool]]:
+        -> List[Tuple[str, str]]:
     """Return members of a given user-group.
 
     :param connection: Connection with bind
@@ -124,17 +124,17 @@ def get_group_members(connection: Connection, group_dn: str, user_dn: str, usern
     connection.search(user_dn, search, attributes=[username_attribute, "nsAccountLock"])
     entries = connection.entries
     for element in entries:
-        members.append((str(getattr(element, username_attribute)), element.nsAccountLock.value))
+        members.append((str(getattr(element, username_attribute)), getattr(element, "nsAccountLock", "FALSE")))
     return members
 
 
-def is_account_enabled(group_member: Tuple[str, bool]) -> Optional[bool]:
+def is_account_enabled(group_member: Tuple[str, str]) -> Optional[bool]:
     """Dumb wrapper function returning if a user is enabled or not.
 
     :param group_member: A user tuple with user-id and nsAccountLock boolean
     :return: Boolean whether account is enabled
     """
-    return not group_member[1]
+    return group_member[1] != "TRUE"
 
 
 class LDAPConnectorException(Exception):
