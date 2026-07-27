@@ -208,7 +208,8 @@ Use `!inviter` to list available commands.
 * `!idp` - list rooms and members defined in the linked IdP
 * `!joined` - list joined rooms
 * `!managed` - list managed rooms
-* `!sync [dry]` - trigger manual sync
+* `!sync` - trigger manual sync
+* `!dryrun` - trigger test sync (Without actually inviting/kickin members.)
 * `!unmanage <room-alias> <new admin>` - unmanage room
 * `!invite-member <room-alias> <user>` - manually add an external member as unmanaged standard user
 * `!kick-member <room-alias> <user>` - manually kick an unmanaged, external member
