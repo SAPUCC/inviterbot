@@ -27,6 +27,9 @@ from inviter.room_structure import MXID, PowerLevel, RoomMember, Room, RoomAlias
 
 import re
 
+query_params= {
+    "$top":999
+}
 
 async def get_client(tenant_id: str, client_id: str, client_secret: str) -> GraphClient:
     """
@@ -80,7 +83,7 @@ def get_group_members_transitive(group_id: str, client) -> Iterable:
     :return: Iterable of all transitive group-members
     """
     logging.getLogger("maubot").debug(f"Fetching transitiveMembers for group {group_id}")
-    members = client.get('/groups/{group_id}/transitiveMembers'.format(group_id=group_id)).json().get('value')
+    members = client.get('/groups/{group_id}/transitiveMembers'.format(group_id=group_id), params=query_params).json().get('value')
     logging.getLogger("maubot").debug(f"get_group_members_transitive members: {members}")
     for member in members:
         if member.get('@odata.type') == '#microsoft.graph.user':
