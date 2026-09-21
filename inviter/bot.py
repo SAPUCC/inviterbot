@@ -85,7 +85,8 @@ class InviterBot(Plugin):
                    "* `idp` - list rooms and members defined in IdP\n"
                    "* `joined` - list joined rooms\n"
                    "* `managed` - list managed rooms\n"
-                   "* `sync [dry]` - trigger manual sync\n"
+                   "* `dryrun` - trigger manual dry sync\n"
+                   "* `sync` - trigger manual sync\n"
                    "* `unmanage <room-alias> [new admin]` - unmanage room\n"
                    "* `invite-member <room-alias> [user]` - manually add an external member as unmanaged standard user\n"
                    "* `kick-member <room-alias> [user]` - manually kick an unmanaged, external member\n"
@@ -157,25 +158,37 @@ class InviterBot(Plugin):
         await evt.respond(helper.generate_message_content(message))
 
     @command.new(name='sync')
-    @command.argument("dry", "dry run", pass_raw=True, required=False, matches=r'dry')
-    async def sync(self, evt: MessageEvent, dry: str) -> None:
+    async def sync(self, evt: MessageEvent) -> None:
+        """Command to perform a manual sync.
+
+        :param evt: Relating message event
+        :return:
+        """
+        await self._perform_sync(evt=evt, dry_run=False)
+
+    @command.new(name='dryrun')
+    async def dryrun(self, evt: MessageEvent) -> None:
+        """Command to perform a manual dry sync without applying changes.
+
+        :param evt: Relating message event
+        :return:
+        """
+        await self._perform_sync(evt=evt, dry_run=True)
+
+    async def _perform_sync(self, evt: MessageEvent, dry_run: bool) -> None:
         """Command to perform a manual sync. Optionally do a dry sync without applying changes.
 
         :param evt: Relating message event
-        :param dry: The dry argument
+        :param dry_run: Whether a dry_run should be performed
         :return:
         """
         if not await self.is_admin_room(evt):
             return
 
-        inviting = kicking = True
-        if dry and 'dry' in dry:
-            inviting = kicking = False
-            self.log.info("Performing a dry sync...")
-            await evt.respond(helper.generate_message_content("Performing a dry sync..."))
-        else:
-            self.log.info("Performing a full sync...")
-            await evt.respond(helper.generate_message_content("Performing a full sync..."))
+        inviting = kicking = not dry_run
+        action = "dry" if dry_run else "full"
+        self.log.info(f"Performing a {action} sync...")
+        await evt.respond(helper.generate_message_content(f"Performing a {action} sync..."))
 
         try:
             room_struct = await helper.get_room_struct_from_idp(self.config)

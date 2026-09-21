@@ -68,7 +68,7 @@ def get_rooms(config: Config) -> Optional[List[Room]]:
                        bind_dn=ldap_config.get("bind_dn"),
                        bind_pass=ldap_config.get("bind_password"))
 
-    if not connection.search(base_dn_groups, "(&(objectClass=group)(cn=xxx*))", attributes=["cn"]):
+    if not connection.search(base_dn_groups, "(&(objectClass=groupOfNames)(cn=xxx*))", attributes=["cn"]):
         logging.getLogger("maubot").warning(f"LDAP search not successful: {connection.result}")
         return None
 
@@ -104,13 +104,14 @@ def get_rooms(config: Config) -> Optional[List[Room]]:
                     config.get_renamed_mxid(MXID(group_member[0], homeserver)), power_level)
                 )
 
+        # logging.getLogger("maubot").warning(f"Room members: {room_members}")
         rooms.append(Room(RoomAlias.from_str(group), room_members))
 
     return rooms
 
 
 def get_group_members(connection: Connection, group_dn: str, user_dn: str, username_attribute: str, search_filter: str = '(objectClass=*)')\
-        -> List[Tuple[str, bool]]:
+        -> List[Tuple[str, str]]:
     """Return members of a given user-group.
 
     :param connection: Connection with bind
@@ -124,17 +125,19 @@ def get_group_members(connection: Connection, group_dn: str, user_dn: str, usern
     connection.search(user_dn, search, attributes=[username_attribute, "nsAccountLock"])
     entries = connection.entries
     for element in entries:
-        members.append((str(getattr(element, username_attribute)), element.nsAccountLock.value))
+        # logging.getLogger("maubot").warning(f"Element {element}")
+        # logging.getLogger("maubot").warning(f"getattr {getattr(element, 'nsAccountLock', 'FALSE')}")
+        members.append((str(getattr(element, username_attribute)), getattr(element, "nsAccountLock", "FALSE")))
     return members
 
 
-def is_account_enabled(group_member: Tuple[str, bool]) -> Optional[bool]:
+def is_account_enabled(group_member: Tuple[str, str]) -> Optional[bool]:
     """Dumb wrapper function returning if a user is enabled or not.
 
     :param group_member: A user tuple with user-id and nsAccountLock boolean
     :return: Boolean whether account is enabled
     """
-    return not group_member[1]
+    return group_member[1] != "TRUE"
 
 
 class LDAPConnectorException(Exception):
