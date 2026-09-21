@@ -164,7 +164,7 @@ class InviterBot(Plugin):
         :param evt: Relating message event
         :return:
         """
-        await self._perform_sync(evt, False)
+        await self._perform_sync(evt=evt, dry_run=False)
 
     @command.new(name='dryrun')
     async def dryrun(self, evt: MessageEvent) -> None:
