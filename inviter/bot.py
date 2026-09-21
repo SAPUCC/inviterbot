@@ -173,7 +173,7 @@ class InviterBot(Plugin):
         :param evt: Relating message event
         :return:
         """
-        await self._perform_sync(evt, True)
+        await self._perform_sync(evt=evt, dry_run=True)
 
     async def _perform_sync(self, evt: MessageEvent, dry_run: bool) -> None:
         """Command to perform a manual sync. Optionally do a dry sync without applying changes.
